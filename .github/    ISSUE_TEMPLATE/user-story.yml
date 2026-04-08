@@ -1,0 +1,48 @@
+name: 📘 User Story
+description: Create a user story with acceptance criteria
+title: "[US-XXX] "
+labels: ["user-story"]
+assignees: []
+
+body:
+  - type: input
+    id: drf
+    attributes:
+      label: DRF Reference
+      description: Related functional requirement (e.g. RF-012)
+      placeholder: RF-XXX
+    validations:
+      required: true
+
+  - type: textarea
+    id: story
+    attributes:
+      label: User Story
+      description: Use the format "Como / Quiero / Para"
+      value: |
+        Como
+        Quiero
+        Para
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Conditions that must be met for this story to be accepted
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / Business Rules
+      description: Optional business rules, validations, or constraints
+      placeholder: RN-XXX
+    validations:
+      required: false
