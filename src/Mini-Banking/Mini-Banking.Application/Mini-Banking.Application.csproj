@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Mini_Banking.Domain</RootNamespace>
+    <RootNamespace>Mini_Banking.Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Mini-Banking.Application"/>
+    <ProjectReference Include="..\Mini-Banking.Domain\Mini-Banking.Domain.csproj" />
   </ItemGroup>
 
 </Project>
