@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Mini-Banking.Application/Mini-Banking.Application.csproj" Id="8a4179c0-8ea3-46b5-a913-333b7df4b94b" />
   <Project Path="Mini-Banking.Domain/Mini-Banking.Domain.csproj" Id="268a09b3-2a9b-45f9-a9f3-fb222d6cd0fe" />
 </Solution>

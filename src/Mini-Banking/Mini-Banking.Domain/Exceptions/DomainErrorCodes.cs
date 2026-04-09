@@ -8,5 +8,6 @@ namespace Mini_Banking.Domain.Exceptions
     {
         public const string InvalidAmount = "amount.negative_value";
         public const string InsufficientBalance = "balance.insufficient_balance";
+        public const string AccountIsNull = "account.account_not_be_null";
     }
 }

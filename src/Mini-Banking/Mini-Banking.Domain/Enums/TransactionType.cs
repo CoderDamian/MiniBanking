@@ -3,7 +3,7 @@
     internal enum TransactionType
     {
         Deposit,
-        Withdraw,
+        Withdrawal,
         Transfer
     }
 }
