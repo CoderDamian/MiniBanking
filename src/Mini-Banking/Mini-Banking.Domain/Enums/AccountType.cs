@@ -1,8 +1,8 @@
 ﻿namespace Mini_Banking.Domain.Enums
 {
-    internal enum AccountType
+    public enum AccountType
     {
         Ahorro,
-        Coriente
+        Corriente
     }
 }

@@ -4,24 +4,27 @@ using Mini_Banking.Domain.ValueObjects;
 
 namespace Mini_Banking.Domain.Entities
 {
-    internal class Account : Entity
+    public class Account : Entity
     {
-        public string Numero { get; private set; }
+        public string Numero { get; private set; } = string.Empty;
         public AccountType Tipo { get; private set; }
         public CurrencyType Currency { get; private set; }
-        public string UserDNI { get; private set; }
         public decimal Balance { get; private set; }
+        public int OwnerID { get; private set; }
 
-        public Account(string numero, AccountType tipo, CurrencyType currency, string userDNI)
+        private Account() : base(0)
+        {
+
+        }
+
+        public Account(int id, string numero, AccountType tipo, CurrencyType currency, int ownerID, decimal balance) : base(id)
         {
             this.Numero = numero;
             this.Tipo = tipo;
             this.Currency = currency;
-            this.UserDNI = userDNI;
+            this.OwnerID = ownerID;
+            this.Balance = balance;
         }
-
-        public decimal GetBalance =>
-            this.Balance;
 
         public void Credit(Amount amount)
         {

@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Mini-Banking.Application"/>
+    <InternalsVisibleTo Include="Mini-Banking.Infrastructure"/>
+    <InternalsVisibleTo Include="Mini-Banking.APIRest"/>
   </ItemGroup>
 
 </Project>

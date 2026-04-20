@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="Mini-Banking.APIRest/Mini-Banking.APIRest.csproj" Id="fe43988a-a72c-496f-a6f4-f791faa69f89" />
   <Project Path="Mini-Banking.Application/Mini-Banking.Application.csproj" Id="8a4179c0-8ea3-46b5-a913-333b7df4b94b" />
   <Project Path="Mini-Banking.Domain/Mini-Banking.Domain.csproj" Id="268a09b3-2a9b-45f9-a9f3-fb222d6cd0fe" />
+  <Project Path="Mini-Banking.Infrastructure/Mini-Banking.Infrastructure.csproj" Id="fe394b06-488c-4722-a58d-e2a817f63f25" />
 </Solution>

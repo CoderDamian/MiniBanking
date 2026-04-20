@@ -1,6 +1,6 @@
 ﻿namespace Mini_Banking.Domain.Enums
 {
-    internal enum CurrencyType
+    public enum CurrencyType
     {
         USD,
         EURO
