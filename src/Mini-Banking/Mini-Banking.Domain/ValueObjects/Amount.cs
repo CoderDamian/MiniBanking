@@ -2,13 +2,14 @@
 
 namespace Mini_Banking.Domain.ValueObjects
 {
-    internal class Amount
+    public class Amount
     {
+        const decimal MinValue = (decimal)0.01;
         public decimal Value { get; private set; }
 
         public Amount(decimal value)
         {
-            if (value < 1)
+            if (value < MinValue)
                 throw new DomainException(DomainErrorCodes.InvalidAmount, "amount value can not be zero or negative");
 
             this.Value = value;

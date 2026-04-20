@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mini_Banking.Domain.Exceptions
+﻿namespace Mini_Banking.Domain.Exceptions
 {
     internal class DomainException : Exception
     {
@@ -13,6 +9,14 @@ namespace Mini_Banking.Domain.Exceptions
                                string message) :base(message)
         {
             this.Code = code;
+        }
+
+        public DomainException(string code,
+                               string message, 
+                               string details) : base(message)
+        {
+            this.Code = code;
+            this.Details = details;
         }
     }
 }

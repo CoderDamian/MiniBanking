@@ -1,6 +1,6 @@
 ﻿namespace Mini_Banking.Domain.Enums
 {
-    internal enum TransactionType
+    public enum TransactionType
     {
         Deposit,
         Withdrawal,

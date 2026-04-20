@@ -1,6 +1,6 @@
 ﻿namespace Mini_Banking.Domain.Enums
 {
-    internal enum TransactionStatus
+    public enum BankTransactionStatus
     {
         Pending,
         Success,
