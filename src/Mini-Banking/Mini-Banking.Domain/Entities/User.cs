@@ -20,16 +20,16 @@ namespace Mini_Banking.Domain.Entities
                     string email)
         {
             if (string.IsNullOrWhiteSpace(dni))
-                throw new DomainException(DomainErrorCodes.EntityInvalidData, "DNI is required.", nameof(dni));
+                throw new DomainException(DomainErrorCode.EntityInvalidData, "DNI is required.", nameof(dni));
 
             if (string.IsNullOrWhiteSpace(nombres))
-                throw new DomainException(DomainErrorCodes.EntityInvalidData, "Nombres is required.", nameof(nombres));
+                throw new DomainException(DomainErrorCode.EntityInvalidData, "Nombres is required.", nameof(nombres));
 
             if (string.IsNullOrWhiteSpace(apellidos))
-                throw new DomainException(DomainErrorCodes.EntityInvalidData, "Apellidos is required.", nameof(apellidos));
+                throw new DomainException(DomainErrorCode.EntityInvalidData, "Apellidos is required.", nameof(apellidos));
 
             if (string.IsNullOrWhiteSpace(email))
-                throw new DomainException(DomainErrorCodes.EntityInvalidData, "Email is required.", nameof(email));
+                throw new DomainException(DomainErrorCode.EntityInvalidData, "Email is required.", nameof(email));
 
             //const string emailPattern = "^[^@\s]+@[^@\s]+\.[^@\s]+$";
             //if (!Regex.IsMatch(user.Email, emailPattern, RegexOptions.IgnoreCase))

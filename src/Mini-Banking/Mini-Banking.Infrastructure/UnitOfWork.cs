@@ -8,13 +8,15 @@ namespace Mini_Banking.Infrastructure
         private IUserRepository _userRepository;
         private IAccountRepository _accountRepository;
         private readonly IBankTransactionRepository _bankTransactionRepository;
+        private readonly IIdempotencyRepository _idempotencyRepository;
 
-        public UnitOfWork(MyDBContext myDBContext, IUserRepository userRepository, IAccountRepository accountRepository, IBankTransactionRepository bankTransactionRepository)
+        public UnitOfWork(MyDBContext myDBContext, IUserRepository userRepository, IAccountRepository accountRepository, IBankTransactionRepository bankTransactionRepository, IIdempotencyRepository idempotencyRepository)
         {
             this._myDBContext = myDBContext;
             this._userRepository = userRepository;
             this._accountRepository = accountRepository;
             this._bankTransactionRepository = bankTransactionRepository;
+            this._idempotencyRepository = idempotencyRepository;
         }
 
         public IUserRepository UserRepository
@@ -30,6 +32,11 @@ namespace Mini_Banking.Infrastructure
         public IBankTransactionRepository BankTransactionRepository
         {
             get => _bankTransactionRepository;
+        }
+
+        public IIdempotencyRepository IdempotencyRepository
+        {
+            get => _idempotencyRepository;
         }
 
         public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

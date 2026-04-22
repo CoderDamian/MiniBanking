@@ -16,10 +16,13 @@ namespace Mini_Banking.APIRest.Controllers
             this._bankTransaction = bankTransaction;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Deposit([FromBody] CreateDepositDTO request)
+        [HttpPost("deposit")]
+        public async Task<IActionResult> Deposit([FromBody] CreateDepositDTO dto)
         {
-            var result = await _bankTransaction.DepositAsync(request);
+            var key = HttpContext.Items["IdempotencyKey"]?.ToString();
+            var requestHash = HttpContext.Items["RequestHash"]?.ToString();
+
+            var result = await _bankTransaction.DepositAsync(dto, key ?? string.Empty, requestHash ?? string.Empty);
 
             return Ok(result);
         }

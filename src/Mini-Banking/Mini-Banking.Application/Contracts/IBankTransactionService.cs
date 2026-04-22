@@ -4,8 +4,8 @@ namespace Mini_Banking.Application.Contracts
 {
     public interface IBankTransactionService
     {
-        Task<Guid> DepositAsync(CreateDepositDTO depositDTO, CancellationToken cancellationToken = default);
-        Task<Guid> WithdrawalAsync(CreateWithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default);
+        Task<string> DepositAsync(CreateDepositDTO depositDTO, string key, string requestHash, CancellationToken cancellationToken = default);
+        Task<string> WithdrawalAsync(CreateWithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default);
         //Guid Transfer(AccountDTO receiver, AccountDTO sender, decimal amount);
     }
 }

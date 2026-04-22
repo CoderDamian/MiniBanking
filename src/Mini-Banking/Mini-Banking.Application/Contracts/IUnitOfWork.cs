@@ -5,6 +5,7 @@
         IUserRepository UserRepository { get; }
         IBankTransactionRepository BankTransactionRepository { get; }
         IAccountRepository AccountRepository { get; }
+        IIdempotencyRepository IdempotencyRepository { get; }
 
         Task BeginTransactionAsync(CancellationToken ct = default);
         Task CommitTransactionAsync(CancellationToken ct = default);

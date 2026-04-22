@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mini_Banking.Application.PersistenceModels;
+using Mini_Banking.Infrastructure.PersistenceModels;
 using Mini_Banking.Infrastructure.Converters;
 
 namespace Mini_Banking.Infrastructure.Mappers
