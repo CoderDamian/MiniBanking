@@ -1,5 +1,6 @@
 ﻿using Mini_Banking.Application.Contracts;
 using Mini_Banking.Application.DTOs;
+using Mini_Banking.Application.Exceptions;
 using Mini_Banking.Domain.Entities;
 using Mini_Banking.Domain.ValueObjects;
 
@@ -14,42 +15,81 @@ namespace Mini_Banking.Application.Sevices
             this._unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> DepositAsync(CreateDepositDTO depositDTO, CancellationToken cancellationToken = default)
-        { 
-            var account = await GetAccountByAsync(depositDTO.ReceiverAccountID, cancellationToken).ConfigureAwait(false);
+#warning Store structured response
+        public async Task<string> DepositAsync(CreateDepositDTO depositDTO, string key, string requestHash, CancellationToken cancellationToken = default)
+        {
+            if (String.IsNullOrEmpty(key) || String.IsNullOrEmpty(requestHash))
+                throw new ApplicationServiceException(ApplicationErrorCode.IdempotencyInvalid, "key or request hash can not be null or empty");
 
-            var bankTransaction = BankTransaction.FromDeposit(account, new Amount(depositDTO.Amount));
-            bankTransaction.Execute();
+            var idempotency = await _unitOfWork.IdempotencyRepository
+                .GetByAsync(key, cancellationToken)
+                .ConfigureAwait(false);
 
-            try
+            if (idempotency is null)
             {
+                idempotency = new Idempotency(key, requestHash);
+
                 await _unitOfWork.BeginTransactionAsync(cancellationToken)
                         .ConfigureAwait(false);
+                
+                try
+                {
+                    // 1. Try to claim idempotency
+                    await _unitOfWork.IdempotencyRepository
+                        .CreateInProgressAsync(idempotency.Key, idempotency.RequestHash, cancellationToken)
+                        .ConfigureAwait(false);
 
-                var newTransactionID = await _unitOfWork.BankTransactionRepository
-                    .AddAsync(bankTransaction, cancellationToken)
-                    .ConfigureAwait(false);
+                    // 2. Execute business logic
+                    var account = await GetAccountByAsync(depositDTO.ReceiverAccountID, cancellationToken).ConfigureAwait(false);
 
-                await _unitOfWork.AccountRepository
-                    .UpdateBalanceAsync(account, cancellationToken)
-                    .ConfigureAwait(false);
+                    var bankTransaction = BankTransaction.FromDeposit(account, new Amount(depositDTO.Amount));
+                    bankTransaction.Execute();
 
-                await _unitOfWork.BankTransactionRepository
-                    .MarkAsCompletedAsync(newTransactionID)
-                    .ConfigureAwait(false);
+                    var newTransactionID = await _unitOfWork.BankTransactionRepository
+                        .AddAsync(bankTransaction, cancellationToken)
+                        .ConfigureAwait(false);
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                    await _unitOfWork.AccountRepository
+                        .UpdateBalanceAsync(account, cancellationToken)
+                        .ConfigureAwait(false);
 
-                await _unitOfWork.SaveChangesAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                    await _unitOfWork.BankTransactionRepository
+                        .MarkAsCompletedAsync(newTransactionID)
+                        .ConfigureAwait(false);
 
-                return newTransactionID;
+                    // 3. Build response (business result, NOT HTTP)
+                    idempotency.SetResponseBody(newTransactionID.ToString());
+                    idempotency.SetStatusCode(200);
+                    idempotency.MarkAsCompleted();
+
+                    // 4. Mark idempotency as completed
+                    await _unitOfWork.IdempotencyRepository
+                        .MarkAsCompletedAsync(idempotency, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    await _unitOfWork.SaveChangesAsync(cancellationToken)
+                        .ConfigureAwait(false);
+
+                    await _unitOfWork.CommitTransactionAsync(cancellationToken)
+                        .ConfigureAwait(false);
+
+                    return newTransactionID.ToString();
+                }
+                catch (Exception)
+                {
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken).ConfigureAwait(false);
+                    throw;
+                }
             }
-            catch (Exception)
+            else
             {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken).ConfigureAwait(false);
-                throw;
+                if (idempotency.RequestHash != requestHash)
+                    throw new ApplicationServiceException(ApplicationErrorCode.IdempotencyInvalid, "Request mismatch");
+
+                if (idempotency.Status == Enums.IdempontecyStatus.Completed)
+                    return idempotency.ResponseBody.ToString();
+                else
+                    throw new ApplicationServiceException(ApplicationErrorCode.IdempotencyInvalid, "Request already in progress");
             }
         }
 
@@ -79,7 +119,7 @@ namespace Mini_Banking.Application.Sevices
         //    return transfer.ID;
         //}
 
-        public async Task<Guid> WithdrawalAsync(CreateWithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default)
+        public async Task<string> WithdrawalAsync(CreateWithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default)
         {
             var account = await GetAccountByAsync(withdrawalDTO.SenderAccountID, cancellationToken).ConfigureAwait(false);
 
@@ -109,7 +149,7 @@ namespace Mini_Banking.Application.Sevices
                 await _unitOfWork.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
 
-                return newTransactionID;
+                return newTransactionID.ToString();
             }
             catch (Exception)
             {

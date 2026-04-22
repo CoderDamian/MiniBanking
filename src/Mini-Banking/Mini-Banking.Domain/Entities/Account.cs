@@ -34,7 +34,7 @@ namespace Mini_Banking.Domain.Entities
         public void Debit(Amount amount)
         {
             if (!HasSufficientFunds(amount.Value))
-                throw new DomainException(DomainErrorCodes.InsufficientBalance, "insufficience balance to the operation");
+                throw new DomainException(DomainErrorCode.InsufficientBalance, "insufficience balance to the operation");
 
             this.Balance -= amount.Value;
         }

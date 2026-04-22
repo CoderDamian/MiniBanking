@@ -1,5 +1,5 @@
 ﻿using Mini_Banking.Application.Contracts;
-using Mini_Banking.Application.PersistenceModels;
+using Mini_Banking.Infrastructure.PersistenceModels;
 using Mini_Banking.Domain.Entities;
 using Mini_Banking.Domain.Enums;
 

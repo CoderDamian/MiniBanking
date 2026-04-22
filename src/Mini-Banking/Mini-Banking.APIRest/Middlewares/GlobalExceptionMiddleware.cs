@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mini_Banking.Application.Exceptions;
 using Mini_Banking.Domain.Exceptions;
 
 namespace Mini_Banking.APIRest.Middlewares
@@ -34,6 +35,7 @@ namespace Mini_Banking.APIRest.Middlewares
             var statusCode = (ex) switch
             {
                 DomainException => StatusCodes.Status422UnprocessableEntity,
+                ApplicationServiceException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
 

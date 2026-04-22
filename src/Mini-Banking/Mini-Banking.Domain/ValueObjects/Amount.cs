@@ -10,7 +10,7 @@ namespace Mini_Banking.Domain.ValueObjects
         public Amount(decimal value)
         {
             if (value < MinValue)
-                throw new DomainException(DomainErrorCodes.InvalidAmount, "amount value can not be zero or negative");
+                throw new DomainException(DomainErrorCode.InvalidAmount, "amount value can not be zero or negative");
 
             this.Value = value;
         }

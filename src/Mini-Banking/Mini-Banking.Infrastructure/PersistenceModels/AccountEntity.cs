@@ -1,4 +1,4 @@
-﻿namespace Mini_Banking.Application.PersistenceModels
+﻿namespace Mini_Banking.Infrastructure.PersistenceModels
 {
     public class AccountEntity()
     {

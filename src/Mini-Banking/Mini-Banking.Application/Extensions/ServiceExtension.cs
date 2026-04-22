@@ -11,6 +11,7 @@ namespace Mini_Banking.Application.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBankTransactionService, BankTransactionService>();
             services.AddScoped<IAccountService, AccountService>();
+            
             return services;
         }
     }

@@ -100,7 +100,7 @@ namespace Mini_Banking.Domain.Entities
         private void ExecuteTransfer()
         {
             if (SenderAccount is null || ReceiverAccount is null)
-                throw new DomainException(DomainErrorCodes.AccountIsNull, "the sender and receiver can not be null");
+                throw new DomainException(DomainErrorCode.AccountIsNull, "the sender and receiver can not be null");
 
             SenderAccount.Debit(Amount);
             ReceiverAccount.Credit(Amount);
@@ -109,7 +109,7 @@ namespace Mini_Banking.Domain.Entities
         private void ExecuteWithdrawal()
         {
             if (SenderAccount is null)
-                throw new DomainException(DomainErrorCodes.AccountIsNull, "the sender can not be null");
+                throw new DomainException(DomainErrorCode.AccountIsNull, "the sender can not be null");
 
             SenderAccount.Debit(Amount);
         }
@@ -117,7 +117,7 @@ namespace Mini_Banking.Domain.Entities
         private void ExecuteDeposit()
         {
             if (ReceiverAccount is null)
-                throw new DomainException(DomainErrorCodes.AccountIsNull, "the receiver can not be null");
+                throw new DomainException(DomainErrorCode.AccountIsNull, "the receiver can not be null");
 
             ReceiverAccount.Credit(Amount);
         }
