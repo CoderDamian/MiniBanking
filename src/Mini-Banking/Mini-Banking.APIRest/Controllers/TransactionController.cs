@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Mini_Banking.Application.Contracts;
 using Mini_Banking.Application.DTOs;
-using System.Runtime.InteropServices;
 
 namespace Mini_Banking.APIRest.Controllers
 {
@@ -17,12 +17,15 @@ namespace Mini_Banking.APIRest.Controllers
         }
 
         [HttpPost("deposit")]
-        public async Task<IActionResult> Deposit([FromBody] CreateDepositDTO dto)
+        public async Task<IActionResult> Deposit([FromBody] CreateDepositRequest request)
         {
             var key = HttpContext.Items["IdempotencyKey"]?.ToString();
             var requestHash = HttpContext.Items["RequestHash"]?.ToString();
 
-            var result = await _bankTransaction.DepositAsync(dto, key ?? string.Empty, requestHash ?? string.Empty);
+            var result = await _bankTransaction.DepositAsync(request,
+                                                             key ?? string.Empty,
+                                                             requestHash ?? string.Empty,
+                                                             new CancellationToken());
 
             return Ok(result);
         }
@@ -30,7 +33,12 @@ namespace Mini_Banking.APIRest.Controllers
         [HttpPost("withdrawl")]
         public async Task<IActionResult> Withdrawal([FromBody] CreateWithdrawalDTO request)
         {
-            var result = await _bankTransaction.WithdrawalAsync(request);
+            var key = HttpContext.Items["IdempotencyKey"]?.ToString();
+            var requestHash = HttpContext.Items["RequestHash"]?.ToString();
+
+            var result = await _bankTransaction.WithdrawalAsync(request,
+                                                                key ?? string.Empty,
+                                                                requestHash ?? string.Empty);
 
             return Ok(result);
         }

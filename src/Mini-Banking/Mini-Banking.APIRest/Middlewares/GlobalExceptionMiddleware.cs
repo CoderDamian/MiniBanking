@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mini_Banking.Application.Exceptions;
 using Mini_Banking.Domain.Exceptions;
 
@@ -36,6 +37,7 @@ namespace Mini_Banking.APIRest.Middlewares
             {
                 DomainException => StatusCodes.Status422UnprocessableEntity,
                 ApplicationServiceException => StatusCodes.Status400BadRequest,
+                DbUpdateConcurrencyException => StatusCodes.Status409Conflict,
                 _ => StatusCodes.Status500InternalServerError
             };
 

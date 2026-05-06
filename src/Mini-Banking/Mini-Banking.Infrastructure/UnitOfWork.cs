@@ -1,4 +1,5 @@
-﻿using Mini_Banking.Application.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Mini_Banking.Application.Contracts;
 
 namespace Mini_Banking.Infrastructure
 {
@@ -66,7 +67,20 @@ namespace Mini_Banking.Infrastructure
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await _myDBContext.SaveChangesAsync().ConfigureAwait(false);
+            try
+            {
+                return await _myDBContext
+                        .SaveChangesAsync()
+                        .ConfigureAwait(false);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new DbUpdateConcurrencyException("The record was modified by another user. Please refresh and try again.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Mini_Banking.Application.Enums;
+using Mini_Banking.Domain.Enums;
 using Mini_Banking.Domain.Exceptions;
 
 namespace Mini_Banking.Domain.Entities
@@ -8,7 +8,7 @@ namespace Mini_Banking.Domain.Entities
     {
         public string Key { get; private set; } = string.Empty;
         public string RequestHash { get; private set; } = string.Empty;
-        public IdempontecyStatus Status { get; private set; }
+        public IdempotencyStatus Status { get; private set; }
         public string ResponseBody { get; private set; } = string.Empty;
         public int StatusCode { get; private set; }
         public DateTime CreatedAt { get; private set; }
@@ -25,11 +25,11 @@ namespace Mini_Banking.Domain.Entities
 
             this.Key = key;
             this.RequestHash = requestHash;
-            this.Status = IdempontecyStatus.InProgress;
+            this.Status = IdempotencyStatus.InProgress;
             this.CreatedAt = DateTime.UtcNow;
         }
 
-        public Idempotency(string key, string requestHash, IdempontecyStatus status, string responseBody, int statusCode, DateTime createdAt, DateTime completedAt, DateTime expiredAt)
+        public Idempotency(string key, string requestHash, IdempotencyStatus status, string responseBody, int statusCode, DateTime createdAt, DateTime completedAt, DateTime expiredAt)
         {
             if (String.IsNullOrWhiteSpace(key))
                 throw new DomainException(DomainErrorCode.EntityInvalidData, "Key cannot be null or empty");
@@ -49,7 +49,7 @@ namespace Mini_Banking.Domain.Entities
 
         public void MarkAsCompleted()
         {
-            if (Status == IdempontecyStatus.Completed)
+            if (Status == IdempotencyStatus.Completed)
                 throw new DomainException(DomainErrorCode.IdempotencyInvalidData, "It is already completed");
 
             if (String.IsNullOrWhiteSpace(ResponseBody))
@@ -58,12 +58,12 @@ namespace Mini_Banking.Domain.Entities
             if (StatusCode == 0)
                 throw new DomainException(DomainErrorCode.IdempotencyInvalidData, "Status code cannot be zero");
 
-            this.Status = IdempontecyStatus.Completed;
+            this.Status = IdempotencyStatus.Completed;
             this.CompletedAt = DateTime.UtcNow;
         }
 
         public void MarkAsFailed() =>
-            this.Status = IdempontecyStatus.Failed;
+            this.Status = IdempotencyStatus.Failed;
 
         public void SetResponseBody(string responseBody)
         {

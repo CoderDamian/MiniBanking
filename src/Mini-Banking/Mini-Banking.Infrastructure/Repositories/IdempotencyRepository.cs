@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Mini_Banking.Application.Contracts;
-using Mini_Banking.Application.Enums;
 using Mini_Banking.Domain.Entities;
+using Mini_Banking.Domain.Enums;
 using Mini_Banking.Infrastructure.PersistenceModels;
 
 namespace Mini_Banking.Infrastructure.Repositories
@@ -21,7 +22,7 @@ namespace Mini_Banking.Infrastructure.Repositories
             
             idempotencyEntity.idempotency_key = key;
             idempotencyEntity.request_hash = requestHash;
-            idempotencyEntity.status = (int)IdempontecyStatus.InProgress;
+            idempotencyEntity.status = (int)IdempotencyStatus.InProgress;
 
             await _myDBContext.Idempotency
                 .AddAsync(idempotencyEntity, cancellationToken)
@@ -40,7 +41,7 @@ namespace Mini_Banking.Infrastructure.Repositories
 
             var idempotency = new Idempotency(idempotencyEntity.idempotency_key,
                                               idempotencyEntity.request_hash,
-                                              (IdempontecyStatus)idempotencyEntity.status,
+                                              (IdempotencyStatus)idempotencyEntity.status,
                                               idempotencyEntity.response_body,
                                               idempotencyEntity.status_code,
                                               idempotencyEntity.created_at,
@@ -60,7 +61,7 @@ namespace Mini_Banking.Infrastructure.Repositories
 
             idempotencyEntity.response_body = idempotency.ResponseBody;
             idempotencyEntity.status_code = idempotency.StatusCode;
-            idempotencyEntity.status = (int)IdempontecyStatus.Completed;
+            idempotencyEntity.status = (int)IdempotencyStatus.Completed;
             idempotencyEntity.completed_at = DateTime.UtcNow;
         }
 
@@ -72,7 +73,7 @@ namespace Mini_Banking.Infrastructure.Repositories
             if (idempotencyEntity is null)
                 throw new Exception();
 
-            idempotencyEntity.status = (int)IdempontecyStatus.Failed;
+            idempotencyEntity.status = (int)IdempotencyStatus.Failed;
         }
     }
 }
