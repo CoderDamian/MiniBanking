@@ -29,7 +29,9 @@ namespace Mini_Banking.Infrastructure.Repositories
                 TransactionStatus = (int)transaction.Status
             };
 
-            await _myDBContext.BankTransactions.AddAsync(transactionEntity, cancellationToken).ConfigureAwait(false);
+            await _myDBContext.BankTransactions
+                .AddAsync(transactionEntity, cancellationToken)
+                .ConfigureAwait(false);
 
             return newID;
         }

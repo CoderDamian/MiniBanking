@@ -1,6 +1,6 @@
 ﻿namespace Mini_Banking.Infrastructure.PersistenceModels
 {
-    public class TransactionEntity()
+    internal class TransactionEntity() : EntityPersistenceModel
     {
         public Guid? ID { get; set; }
         public int? SenderFK { get; set; }

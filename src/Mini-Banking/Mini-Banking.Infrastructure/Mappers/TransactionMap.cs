@@ -12,6 +12,11 @@ namespace Mini_Banking.Infrastructure.Mappers
             builder.ToTable("TRANSACTIONS");
 
             builder.HasKey(p => p.ID);
+            
+            builder.Property(p => p.RowVersion)
+                .IsRowVersion()
+                .HasColumnName("ROW_VERSION")
+                .IsRequired();
 
             builder.Property(p => p.ID).HasColumnName("TRANSACTION_ID");
             builder.Property(p => p.SenderFK).HasColumnName("SENDER_FK");
